@@ -1,7 +1,7 @@
 import { AlertCircle, RotateCcw, ChevronDown } from 'lucide-react';
 import CheckSummary from './CheckSummary';
 
-export default function Exchange({ exchange, isLatest, busy, npcName, error, errorDetail, onRegenerate, checks, onApply, onUndoApply, onFollowUp, onAddNote, collapsible, open, onToggle }){
+export default function Exchange({ exchange, isLatest = false, busy = false, npcName = '', error = null, errorDetail = '', onRegenerate = null, checks = [], onApply, onUndoApply, onFollowUp, onAddNote, collapsible = false, open = false, onToggle = null }){
   const { user, replies } = exchange;
   const body = (
     <div className="space-y-3">

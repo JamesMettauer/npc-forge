@@ -31,7 +31,10 @@ const STEPS = [
   { title: 'Final Review', render: (npc, setNPC, onJump) => <FinalReviewStep npc={npc} setNPC={setNPC} onJumpToStep={onJump}/> },
 ];
 
-export default function NPCWizard({ npc, setNPC, onSave, saving, onExit }){
+/**
+ * @param {{ npc: Record<string, any>, setNPC: import('react').Dispatch<import('react').SetStateAction<Record<string, any>>>, onSave: () => void | Promise<void>, saving: boolean, onExit?: (() => void) | null }} props
+ */
+export default function NPCWizard({ npc, setNPC, onSave, saving, onExit = null }){
   const [step, setStep] = useState(() => {
     const s = loadDraft()?.step ?? 0;
     console.log('[NPCWizard] init step from draft =', s);

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Star, Plus, X, Pencil, Check, Lock, Unlock, AlertTriangle, Wand2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { addEntryToField, parseEntries } from '@/lib/personality';
+import { arrayOf, isString, requireRecord } from '@/lib/runtimeTypes';
 
 const has = (v) => !!(v && String(v).trim());
 const MAX_PRIMARY = 5;
@@ -25,14 +26,14 @@ const OPTIONAL_FLEX = ['likes_dislikes', 'fears'];
 const newId = () => `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
 export default function PersonalityStep({ npc, setNPC }){
-  const [locks, setLocks] = useState({});
+  const [locks, setLocks] = useState(/** @type {Record<string, boolean>} */ ({}));
   const [editKey, setEditKey] = useState(null);
   const [draft, setDraft] = useState('');
   const [newTrait, setNewTrait] = useState('');
   const [showMajor, setShowMajor] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
-  const [expanded, setExpanded] = useState({});
+  const [expanded, setExpanded] = useState(/** @type {Record<string, boolean>} */ ({}));
 
   const set = (k, v) => setNPC((p) => ({ ...p, [k]: v }));
   const traits = parseEntries(npc.personality_traits);
@@ -88,7 +89,8 @@ export default function PersonalityStep({ npc, setNPC }){
         prompt: `Given this D&D NPC, suggest 3-5 Primary Personality Traits that define the character's stable identity. Base them on the existing profile. Each trait should be one concise sentence. Return as a JSON array of strings.\n\nNPC: ${JSON.stringify({ name: npc.name, species: npc.species, occupation: npc.occupation, class_name: npc.class_name, backstory: npc.backstory, goals: npc.goals, personality_traits: npc.personality_traits })}`,
         response_json_schema: { type: 'object', properties: { traits: { type: 'array', items: { type: 'string' } } } },
       });
-      const suggested = (data?.traits || []).filter((t) => t && !traits.some((x) => x.toLowerCase() === t.toLowerCase()));
+      const result = requireRecord(data, 'Primary trait response');
+      const suggested = arrayOf(result.traits, isString).filter((t) => t && !traits.some((x) => x.toLowerCase() === t.toLowerCase()));
       if (suggested.length) set('personality_traits', addEntryToField(npc.personality_traits, suggested.join('\n')));
       const slots = MAX_PRIMARY - primary.length;
       const newPrim = suggested.slice(0, Math.max(1, slots)).filter((t) => !primary.includes(t));
@@ -98,9 +100,11 @@ export default function PersonalityStep({ npc, setNPC }){
     setBusy(false); setTimeout(() => setMsg(''), 3000);
   };
 
+  /** @param {import('react').FormEvent<HTMLFormElement>} e */
   const submitMajor = (e) => {
-    e?.preventDefault();
-    const form = Object.fromEntries(new FormData(e?.target || new FormData()).entries());
+    e.preventDefault();
+    const form = /** @type {Record<string, FormDataEntryValue>} */ ({});
+    new FormData(e.currentTarget).forEach((value, key) => { form[key] = value; });
     const ev = {
       id: newId(), date: new Date().toISOString(),
       existing_trait: form.existing_trait || '', proposed_trait: form.proposed_trait || '',
@@ -148,7 +152,7 @@ export default function PersonalityStep({ npc, setNPC }){
           ))}
         </div>
         <div className="mt-2 flex gap-1">
-          <input placeholder={`Add ${f.label.toLowerCase()}…`} onKeyDown={(e) => { if (e.key === 'Enter' && e.target.value.trim()) { addFlex(key, e.target.value.trim()); e.target.value = ''; } }} className="flex-1 rounded border border-border bg-input px-2 py-1 text-xs text-foreground outline-none focus:border-brand/50"/>
+          <input placeholder={`Add ${f.label.toLowerCase()}…`} onKeyDown={(e) => { if (e.key === 'Enter' && e.currentTarget.value.trim()) { addFlex(key, e.currentTarget.value.trim()); e.currentTarget.value = ''; } }} className="flex-1 rounded border border-border bg-input px-2 py-1 text-xs text-foreground outline-none focus:border-brand/50"/>
         </div>
       </div>
     );
@@ -179,8 +183,8 @@ export default function PersonalityStep({ npc, setNPC }){
                 <div key={t} className="flex flex-wrap items-center gap-1.5 rounded-lg bg-muted/40 px-2 py-1.5">
                   {editKey === t ? (
                     <div className="flex flex-1 items-center gap-1">
-                      <input autoFocus defaultValue={t} onKeyDown={(e) => { if (e.key === 'Enter') { editTrait(t, e.target.value); setEditKey(null); } }} className="flex-1 rounded border border-border bg-input px-2 py-1 text-xs text-foreground"/>
-                      <button onClick={(e) => { const inp = e.target.closest('div').querySelector('input'); editTrait(t, inp.value); setEditKey(null); }} className="text-green-600 dark:text-green-300"><Check size={12}/></button>
+                      <input autoFocus defaultValue={t} onKeyDown={(e) => { if (e.key === 'Enter') { editTrait(t, e.currentTarget.value); setEditKey(null); } }} className="flex-1 rounded border border-border bg-input px-2 py-1 text-xs text-foreground"/>
+                      <button onClick={(e) => { const inp = e.currentTarget.parentElement?.querySelector('input'); if (inp) editTrait(t, inp.value); setEditKey(null); }} className="text-green-600 dark:text-green-300"><Check size={12}/></button>
                       <button onClick={() => setEditKey(null)} className="text-muted-foreground"><X size={12}/></button>
                     </div>
                   ) : (

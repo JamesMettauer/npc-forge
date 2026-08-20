@@ -1,6 +1,9 @@
 import React from "react";
 
-export default function AuthLayout({ icon: Icon, title, subtitle, footer, children }) {
+/**
+ * @param {{ icon: import('lucide-react').LucideIcon, title: string, subtitle?: string, footer?: import('react').ReactNode, children?: import('react').ReactNode }} props
+ */
+export default function AuthLayout({ icon: Icon, title, subtitle = '', footer = null, children = null }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">

@@ -96,7 +96,7 @@ export default function Dashboard() {
     ledger: { label: 'Campaign Ledger', node: <CampaignLedger campaigns={campaigns} npcs={npcs} conversations={conversations} theme={theme} styles={styles} /> },
     npcs: { label: 'NPC Cards', node: <NpcCardStack npcs={npcs} theme={theme} styles={styles} /> },
     conversations: { label: 'Active Conversations', node: <ActiveConversations conversations={conversations} npcs={npcs} theme={theme} styles={styles} onUpdated={reloadConversations} /> },
-    quickactions: { label: 'Desk Tools', node: <QuickActions onInvite={() => setInviteOpen(true)} onDice={() => setDiceOpen(true)} onSearch={() => setSearchOpen(true)} theme={theme} styles={styles} /> },
+    quickactions: { label: 'Desk Tools', node: <QuickActions onInvite={() => setInviteOpen(true)} onDice={() => setDiceOpen(true)} theme={theme} styles={styles} /> },
     news: { label: 'News & Updates', node: <NewsPanel state={state} onMarkRead={onMarkNewsRead} onHide={onHideNews} theme={theme} styles={styles} /> },
     search: { label: 'Global Search', node: <SearchSummon theme={theme} styles={styles} onOpen={() => setSearchOpen(true)} /> },
   };

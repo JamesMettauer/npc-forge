@@ -108,7 +108,10 @@ export default function FinalReviewStep({ npc, setNPC, onJumpToStep }){
   );
 }
 
-function Section({ title, onEdit, children }) {
+/**
+ * @param {{ title: string, onEdit?: (() => void) | null, children: import('react').ReactNode }} props
+ */
+function Section({ title, onEdit = null, children }) {
   return (
     <div className="rounded-xl border border-border p-4">
       <div className="mb-2 flex items-center justify-between">

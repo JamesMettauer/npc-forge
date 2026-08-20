@@ -15,7 +15,10 @@ const METHODS = [
   { key: 'quick', label: 'Quick Import', icon: Zap, desc: 'Just the essentials for roleplay' },
 ];
 
-export default function ImportWizard({ existingCharacter, campaignId, campaignName, onSaved, onClose }){
+/**
+ * @param {{ existingCharacter?: Record<string, any> | null, campaignId?: string, campaignName?: string, onSaved?: (() => void | Promise<void>) | null, onClose?: (() => void) | null }} props
+ */
+export default function ImportWizard({ existingCharacter = null, campaignId = '', campaignName = '', onSaved = null, onClose = null }){
   const [step, setStep] = useState(existingCharacter ? 'upload' : 'method');
   const [method, setMethod] = useState(null);
   const [extracted, setExtracted] = useState(null);

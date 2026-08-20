@@ -12,8 +12,8 @@ const FIELDS = [
 const has = (v) => !!(v && String(v).trim());
 
 export default function AppearanceStep({ npc, setNPC }){
-  const [locks, setLocks] = useState({});
-  const [status, setStatus] = useState({});
+  const [locks, setLocks] = useState(/** @type {Record<string, boolean>} */ ({}));
+  const [status, setStatus] = useState(/** @type {Record<string, '' | 'generating' | 'error'>} */ ({}));
   const [editKey, setEditKey] = useState(null);
   const [draft, setDraft] = useState('');
   const [imageEdited, setImageEdited] = useState(false);

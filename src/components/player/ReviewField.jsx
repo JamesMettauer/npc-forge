@@ -1,6 +1,6 @@
 import { CONFIDENCE_STATES } from '@/lib/characterImport';
 
-export default function ReviewField({ label, value, confidence, onChange, onIgnore, changed }){
+export default function ReviewField({ label, value, confidence, onChange, onIgnore = null, changed = false }){
   const conf = CONFIDENCE_STATES[confidence] || CONFIDENCE_STATES.needs_review;
   const isEmpty = value == null || value === '';
   return (

@@ -1,1 +1,4 @@
-export default function PageHeader({eyebrow,title,description,action}){return <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.22em] text-brand/70">{eyebrow}</p><h1 className="mt-2 font-serif text-3xl font-semibold sm:text-4xl">{title}</h1>{description&&<p className="mt-2 max-w-2xl text-sm leading-6 text-stone-400">{description}</p>}</div>{action}</header>}
+/**
+ * @param {{ eyebrow: string, title: string, description?: string, action?: import('react').ReactNode }} props
+ */
+export default function PageHeader({ eyebrow, title, description = '', action = null }){return <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.22em] text-brand/70">{eyebrow}</p><h1 className="mt-2 font-serif text-3xl font-semibold sm:text-4xl">{title}</h1>{description&&<p className="mt-2 max-w-2xl text-sm leading-6 text-stone-400">{description}</p>}</div>{action}</header>}

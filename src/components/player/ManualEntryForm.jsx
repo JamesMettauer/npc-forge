@@ -3,7 +3,10 @@ import { SKILL_LIST } from '@/lib/dice';
 import { abilityModifier } from '@/lib/characterSheet';
 import { QUICK_SKILLS } from '@/lib/characterImport';
 
-export default function ManualEntryForm({ initial, quickMode, onSave, onBack, busy }){
+/**
+ * @param {{ initial?: Record<string, any> | null, quickMode?: boolean, onSave: (data: Record<string, any>) => void | Promise<void>, onBack: () => void, busy?: boolean }} props
+ */
+export default function ManualEntryForm({ initial = null, quickMode = false, onSave, onBack, busy = false }){
   const [form, setForm] = useState(() => ({
     name: '', player_name: '', race: '', character_class: '', level: 1,
     pronouns: '', background: '', alignment: '', appearance: '', equipment: '',

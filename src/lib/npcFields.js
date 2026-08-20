@@ -1,3 +1,9 @@
+/**
+ * @typedef {[string, string, 'text' | 'textarea' | 'number'] | [string, string, 'select', string[]]} NPCField
+ * @typedef {{ title: string, fields: NPCField[], combat?: boolean }} NPCSection
+ */
+
+/** @type {NPCSection[]} */
 export const sections = [
  {title:'Basic Information',fields:[['name','Character name','text'],['nicknames','Nicknames or titles','text'],['pronouns','Pronouns','text'],['age','Age','text'],['species','Species or lineage','text'],['homeland','Homeland','text'],['region','Region','text'],['culture','Culture','text'],['class_name','Class','text'],['subclass','Subclass','text'],['level','Character level','number'],['alignment','Alignment','text'],['occupation','Occupation or role','text'],['faction','Faction or organization','text'],['campaign','Campaign setting','text']]},
  {title:'Appearance',fields:[['physical_description','Physical description','textarea'],['clothing_equipment','Clothing and equipment','textarea'],['distinguishing_features','Distinguishing features','textarea'],['image_prompt','Image-generation description','textarea'],['art_style','Approved art style','text']]},

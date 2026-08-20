@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { LayoutDashboard, WandSparkles, Library, Map, MessagesSquare, ScrollText, Settings, Dices, Users } from 'lucide-react';
 import ThemeQuickPicker from '@/components/ThemeQuickPicker';
 
+/** @type {Array<[string, string, import('lucide-react').LucideIcon]>} */
 const items = [['/','Dashboard',LayoutDashboard],['/create','Create NPC',WandSparkles],['/library','NPC Library',Library],['/player-characters','Player Characters',Users],['/campaigns','Campaigns',Map],['/conversations','Active Conversations',MessagesSquare],['/templates','Templates',ScrollText],['/settings','Settings',Settings]];
 
 export default function AppLayout(){

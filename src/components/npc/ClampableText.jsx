@@ -25,6 +25,7 @@ export default function ClampableText({ text, emptyText, lines = 3, className = 
   if (!text) return <p className={`mt-2 text-sm leading-6 italic text-muted-foreground ${className}`}>{emptyText}</p>;
 
   const showToggle = expanded || overflows;
+  /** @type {import('react').CSSProperties | undefined} */
   const clampStyle = expanded ? undefined : { display: '-webkit-box', WebkitLineClamp: lines, WebkitBoxOrient: 'vertical', overflow: 'hidden' };
 
   return (
