@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@/components/ui/*": ["./types/base44-ui-vendor.d.ts"],
       "@/*": ["./src/*"]
     },
     "jsx": "react-jsx",
@@ -16,6 +17,6 @@
     "resolveJsonModule": true,
     "types": []
   },
-  "include": ["src/components/**/*.js", "src/pages/**/*.jsx", "src/Layout.jsx"],
-  "exclude": ["node_modules", "dist", "src/vite-plugins", "src/components/ui", "src/api", "src/lib"]
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx", "types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "src/vite-plugins", "src/components/ui"]
 } 
