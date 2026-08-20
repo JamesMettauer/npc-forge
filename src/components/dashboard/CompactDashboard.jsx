@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-import { AlertCircle, BookOpen, Users, MessageSquare, Wand2, Newspaper, Search } from 'lucide-react';
 
 // Compact mobile view — themed cards in priority order, no desk layout.
 export default function CompactDashboard({ objects, order, hidden, theme, styles, onSearch }) {

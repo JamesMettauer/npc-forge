@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, ChevronLeft, ChevronRight, Plus, Archive, Search, MapPin, Users, MessageSquare } from 'lucide-react';
-import { Image } from '@/components/ui/image';
+import { BookOpen, ChevronLeft, ChevronRight, Plus, Archive, MapPin, Users, MessageSquare } from 'lucide-react';
 
 export default function CampaignLedger({ campaigns, npcs, conversations, theme, styles }) {
   const active = campaigns.filter((c) => c.status !== 'completed');

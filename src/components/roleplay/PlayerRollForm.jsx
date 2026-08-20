@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Dices, X, Check } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 import { SKILL_LIST, DC_BASELINES } from '@/lib/dice';
 
 // Compact entry for a dice roll the DM made physically at the table.

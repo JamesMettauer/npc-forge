@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Star, Plus, X, Pencil, Check, Lock, Unlock, Sparkles, AlertTriangle, Wand2 } from 'lucide-react';
+import { Star, Plus, X, Pencil, Check, Lock, Unlock, AlertTriangle, Wand2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
-import { addEntryToField, parseEntries, PERSONALITY_FIELDS, EMPTY_STATES } from '@/lib/personality';
+import { addEntryToField, parseEntries } from '@/lib/personality';
 
 const has = (v) => !!(v && String(v).trim());
 const MAX_PRIMARY = 5;

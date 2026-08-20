@@ -4,7 +4,7 @@
  * tiers, and existing learned info / secrets / summary.
  */
 import { useState } from 'react';
-import { BookOpen, KeyRound, ScrollText, Dices, ChevronDown, Lock, Unlock, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { BookOpen, KeyRound, ScrollText, Dices, ChevronDown, Lock, Unlock, Eye, Sparkles } from 'lucide-react';
 import { INTEL_SKILLS, DIFFICULTIES, BASE_DC } from '@/lib/conversationIntelligence';
 
 const DIFF_LABELS = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };

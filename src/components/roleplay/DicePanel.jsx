@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Dices, Eye, EyeOff, Plus, X } from 'lucide-react';
-import { SKILL_LIST, SKILLS, rollCheck, observedForTier, suggestedDC, defaultDifficulty, baseDCFor, DIFFICULTY_OPTIONS, SITUATIONAL_PRESETS, computeFinalDC, CRIT_SETTINGS, degreeOfOutcome, DC_MODES } from '@/lib/dice';
+import { SKILL_LIST, SKILLS, rollCheck, observedForTier, defaultDifficulty, baseDCFor, DIFFICULTY_OPTIONS, SITUATIONAL_PRESETS, computeFinalDC, CRIT_SETTINGS, degreeOfOutcome, DC_MODES } from '@/lib/dice';
 
 export default function DicePanel({ open, onOpenChange, npc, prefillSkill, onResult, latestExchangeId }){
   const [skill, setSkill] = useState(prefillSkill || 'Medicine');

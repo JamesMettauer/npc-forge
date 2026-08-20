@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, Camera, Plus, X, ChevronUp, ChevronDown, FileText, Image as ImageIcon } from 'lucide-react';
+import { Upload, Camera, Plus, X, ChevronUp, ChevronDown, FileText } from 'lucide-react';
 import { ACCEPT_STRING, isImageFile } from '@/lib/characterImport';
 
 const VALID_EXTS = ['pdf', 'docx', 'jpg', 'jpeg', 'png', 'webp', 'heic'];

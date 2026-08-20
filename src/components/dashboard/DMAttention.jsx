@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { AlertCircle, Mail, FileText, Clock, Bell, Check, X } from 'lucide-react';
+import { AlertCircle, Mail, FileText, Clock, Bell, Check } from 'lucide-react';
 
 const PRIORITY_META = {
   urgent: { label: 'Urgent', seal: '#9a2a2a', icon: AlertCircle, pulse: true },

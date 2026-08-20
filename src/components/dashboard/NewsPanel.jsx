@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Newspaper, Eye, X } from 'lucide-react';
+import { Newspaper, X } from 'lucide-react';
 
 const NEWS = [
   { id: 'n1', category: 'NPC Forge updates', title: 'Dashboard Command Center arrives', body: 'Your desk is now a living, themeable DM workspace with DM Attention, a Campaign Ledger, and quick-action desk objects.', date: '2026-08-01' },

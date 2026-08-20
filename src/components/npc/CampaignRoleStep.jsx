@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Sparkles, RefreshCw, Info, AlertCircle, Wand2 } from 'lucide-react';
+import { Info, Wand2 } from 'lucide-react';
 import { STANDALONE_NOTE, gatherCampaignContext, generateCampaignRole, isStandalone } from '@/lib/campaignRole';
 import PersistentRoleDropdown from './PersistentRoleDropdown';
 
