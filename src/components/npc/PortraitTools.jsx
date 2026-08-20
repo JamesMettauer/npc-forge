@@ -27,8 +27,7 @@ export default function PortraitTools({ npc, onChange }){
     try {
       const prompt = npc.image_prompt || buildImageDescription(npc) || npc.physical_description || npc.name;
       const { url } = await base44.integrations.Core.GenerateImage({
-        prompt,
-        existing_image_urls: npc.portrait_url ? [npc.portrait_url] : undefined
+        prompt
       });
       onChange('portrait_url', url);
     } catch (err) {

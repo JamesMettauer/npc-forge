@@ -105,7 +105,7 @@ export function buildSheetData(npc) {
 
 /** Fill the PDF using pdf-lib and return bytes */
 export async function exportToPDF(npc, flatten = false) {
-  const { PDFDocument } = await import('pdf-lib');
+  const { PDFDocument, PDFTextField, PDFCheckBox } = await import('pdf-lib');
   const pdfUrl = 'https://media.base44.com/files/public/6a6a67bab00134fba7b5ee69/2827b2230_Base44_NPC_Character_Sheet.pdf';
   const resp = await fetch(pdfUrl);
   if (!resp.ok) throw new Error('Could not load PDF template');
@@ -119,9 +119,8 @@ export async function exportToPDF(npc, flatten = false) {
     try {
       const field = form.getField(name);
       if (!field) return;
-      const type = field.constructor.name;
-      if (type === 'PDFTextField') field.setText(String(value));
-      else if (type === 'PDFCheckBox') { if (value) field.check(); else field.uncheck(); }
+      if (field instanceof PDFTextField) field.setText(String(value));
+      else if (field instanceof PDFCheckBox) { if (value) field.check(); else field.uncheck(); }
     } catch { /* field not in this PDF version */ }
   };
 
