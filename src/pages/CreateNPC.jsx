@@ -26,7 +26,7 @@ export default function CreateNPC(){
     const d=loadDraft();
     return(d&&d.npc&&hasDraftData(d.npc))?d.npc:initialNPC;
   });
-  const [prompt,setPrompt]=useState(''),[templates,setTemplates]=useState([]),[busy,setBusy]=useState(false),[saved,setSaved]=useState(null),[campaigns,setCampaigns]=useState([]),[campaignId,setCampaignId]=useState('');
+  const [prompt,setPrompt]=useState(''),[templates,setTemplates]=useState([]),[busy,setBusy]=useState(false),[saved,setSaved]=useState(null),[campaigns,setCampaigns]=useState([]),[campaignId,setCampaignId]=useState(''),[error,setError]=useState('');
 
   // Refs to avoid stale closures in the beforeunload handler.
   const npcRef=useRef(npc),choiceRef=useRef(choice),savedRef=useRef(saved);
@@ -63,11 +63,11 @@ export default function CreateNPC(){
   },[]);
   useEffect(()=>{const id=params.get('duplicate');if(id)base44.entities.NPC.get(id).then(x=>{const {id:_,created_date,updated_date,created_by_id,...copy}=x;clearDraft();setNPC({...copy,name:`${x.name} Copy`,archived:false});setChoice(copy.mode)});},[]);
   useEffect(()=>{loadCampaigns().then(setCampaigns);base44.entities.NPCTemplate.list('-created_date').then(setTemplates);},[]);
-  const choose=async c=>{if(c==='quick')setChoice(c);else if(c==='auto')setChoice(c);else{clearDraft();setNPC({...initialNPC,mode:c});setChoice(c)}};
-  const generate=async()=>{setBusy(true);try{const campaign=campaignId?await base44.entities.Campaign.get(campaignId):null;const data=await generateFromPrompt(prompt,campaign,{});const{sources,warnings,extracted,generated,...fields}=data;const next={...initialNPC,...fields,mode:'roleplay',faction:stringValue(fields.faction),campaign:stringValue(fields.campaign),original_creation_prompt:prompt,prompt_sources:isRecord(sources)?sources:{},prompt_meta:{warnings:arrayOf(warnings,isString),extracted:arrayOf(extracted,isString),generated:arrayOf(generated,isString)},campaign_id:campaign?.id||''};if(!next.faction)next.faction='Independent';if(!next.campaign)next.campaign=campaign?.name||generateGenericSetting(next);clearDraft();setNPC(next);setChoice('roleplay');}catch{}setBusy(false)};
-  const useTemplate=(template)=>{const next=applyTemplateData(initialNPC,template?.npc_data);clearDraft();setNPC(next);setChoice(next.mode==='combat'?'combat':'roleplay');};
-  const save=async()=>{setBusy(true);try{const s=await base44.entities.NPC.create(npc);const withBaseline=await saveDefaultSnapshot(s);clearDraft();setSaved(withBaseline);}catch{}setBusy(false)};
-  const reset=()=>{clearDraft();setSaved(null);setChoice(null);setNPC(initialNPC);setPrompt('');};
+  const choose=async c=>{setError('');if(c==='quick')setChoice(c);else if(c==='auto')setChoice(c);else{clearDraft();setNPC({...initialNPC,mode:c});setChoice(c)}};
+  const generate=async()=>{setBusy(true);setError('');try{const campaign=campaignId?await base44.entities.Campaign.get(campaignId):null;const data=await generateFromPrompt(prompt,campaign,{});const{sources,warnings,extracted,generated,...fields}=data;const next={...initialNPC,...fields,mode:'roleplay',faction:stringValue(fields.faction),campaign:stringValue(fields.campaign),original_creation_prompt:prompt,prompt_sources:isRecord(sources)?sources:{},prompt_meta:{warnings:arrayOf(warnings,isString),extracted:arrayOf(extracted,isString),generated:arrayOf(generated,isString)},campaign_id:campaign?.id||''};if(!next.faction)next.faction='Independent';if(!next.campaign)next.campaign=campaign?.name||generateGenericSetting(next);clearDraft();setNPC(next);setChoice('roleplay');}catch{setError('NPC generation failed. Please check your connection and try again.');}finally{setBusy(false)}};
+  const useTemplate=(template)=>{setError('');const next=applyTemplateData(initialNPC,template?.npc_data);clearDraft();setNPC(next);setChoice(next.mode==='combat'?'combat':'roleplay');};
+  const save=async()=>{setBusy(true);setError('');try{const s=await base44.entities.NPC.create(npc);const withBaseline=await saveDefaultSnapshot(s);clearDraft();setSaved(withBaseline);}catch{setError('NPC saving failed. Your draft is still available; please try again.');}finally{setBusy(false)}};
+  const reset=()=>{clearDraft();setSaved(null);setChoice(null);setNPC(initialNPC);setPrompt('');setError('');};
   return (
     <div className="min-h-screen tavern-ambient">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -82,6 +82,7 @@ export default function CreateNPC(){
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">A Guild Master sits at a tavern table with a blank contract, interviewing and imagining a new character.</p>
                 </header>
               </div>
+              {error&&<div role="alert" className="mb-4 rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-sm text-destructive">{error}</div>}
               {!choice ? <ModeChooser onChoose={choose}/> :
                choice==='template' ? <div><button onClick={()=>setChoice(null)} className="mb-4 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">← Back to choices</button><TemplatePicker templates={templates} onUseTemplate={useTemplate}/></div> :
                choice==='auto' ? <PromptBox prompt={prompt} setPrompt={setPrompt} generate={generate} busy={busy} campaigns={campaigns} campaignId={campaignId} setCampaignId={setCampaignId}/> :

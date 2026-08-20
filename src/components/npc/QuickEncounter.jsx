@@ -131,7 +131,7 @@ Scale stats to the Encounter Role. If a campaign context is provided, favor esta
         power_level: role,
         quantity: quantity,
         campaign_id: campaignId || '',
-        campaign: campaign?.setting || campaign?.name || '',
+        campaign: campaign?.name || '',
         temporary: true,
         original_creation_prompt: description,
       };

@@ -4,12 +4,12 @@ import { Newspaper, X } from 'lucide-react';
 const NEWS = [
   { id: 'n1', category: 'NPC Forge updates', title: 'Dashboard Command Center arrives', body: 'Your desk is now a living, themeable DM workspace with DM Attention, a Campaign Ledger, and quick-action desk objects.', date: '2026-08-01' },
   { id: 'n2', category: 'New features', title: 'Four immersive desk themes', body: 'Switch between Guildmaster’s Desk, Wizard’s Tower, Royal War Room, and Tavern Backroom — each restyles your workspace.', date: '2026-07-28' },
-  { id: 'n3', category: 'D&D-related news', title: 'SRD reference content', body: 'Use the latest SRD content as a baseline for templates and NPC builds.', date: '2026-07-20' },
-  { id: 'n4', category: 'Community templates', title: 'Featured: Innkeeper bundle', body: 'A community template pack for tavern-based NPCs is available in Templates.', date: '2026-07-15' },
+  { id: 'n3', category: 'NPC Forge updates', title: 'Safer reusable templates', body: 'NPC templates now preserve reusable character-building fields while excluding identity, campaign, portrait, runtime, history, and backup data.', date: '2026-07-20' },
+  { id: 'n4', category: 'New features', title: 'Create your own NPC templates', body: 'Save a reusable foundation from an existing NPC, then select it when starting a new character.', date: '2026-07-15' },
   { id: 'n5', category: 'Maintenance notices', title: 'Theme asset caching', body: 'Desk themes now cache locally for faster loads on return visits.', date: '2026-07-10' },
 ];
 
-const CATEGORIES = ['All', 'NPC Forge updates', 'New features', 'D&D-related news', 'Community templates', 'Maintenance notices'];
+const CATEGORIES = ['All', 'NPC Forge updates', 'New features', 'Maintenance notices'];
 
 export default function NewsPanel({ state, onMarkRead, onHide, theme, styles }) {
   const [cat, setCat] = useState('All');
