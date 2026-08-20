@@ -73,6 +73,14 @@ export const buildImageDescription = (npc) => {
 };
 
 const llm = (prompt, schema) => base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema });
+const normalizeAppearance = (value, context) => {
+  const data = requireRecord(value, context);
+  return {
+    physical_description: stringValue(data.physical_description),
+    clothing_equipment: stringValue(data.clothing_equipment),
+    distinguishing_features: stringValue(data.distinguishing_features),
+  };
+};
 
 // ── Character Contract context builder ──
 // Assembles established facts in priority order so generation never
@@ -177,7 +185,7 @@ ${ctx}
 
 Return JSON with keys physical_description, clothing_equipment, distinguishing_features. Each value is a short descriptive paragraph.`;
   const schema = { type: 'object', properties: { physical_description: { type: 'string' }, clothing_equipment: { type: 'string' }, distinguishing_features: { type: 'string' } }, required: ['physical_description', 'clothing_equipment', 'distinguishing_features'] };
-  return llm(prompt, schema);
+  return normalizeAppearance(await llm(prompt, schema), 'Appearance response');
 };
 
 export const generatePhysical = async (npc) => {
@@ -295,5 +303,5 @@ export const migrateAppearance = async (npc) => {
   if (!source) return null;
   const prompt = `Split the following mixed NPC appearance text into three clearly separated fields.\n- physical_description: permanent body and anatomy only.\n- clothing_equipment: worn and carried items only.\n- distinguishing_features: visually recognizable traits, expressions, mannerisms that can be seen (no abstract personality).\nKeep details consistent and do not duplicate the same detail across fields. Refine wording to third person. Do not invent new details beyond the source text.\n\nMixed text:\n${source}\n\nReturn JSON with keys physical_description, clothing_equipment, distinguishing_features.`;
   const schema = { type: 'object', properties: { physical_description: { type: 'string' }, clothing_equipment: { type: 'string' }, distinguishing_features: { type: 'string' } }, required: ['physical_description', 'clothing_equipment', 'distinguishing_features'] };
-  return llm(prompt, schema);
+  return normalizeAppearance(await llm(prompt, schema), 'Appearance migration response');
 };

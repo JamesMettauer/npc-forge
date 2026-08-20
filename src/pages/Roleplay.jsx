@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { arrayOf, isRecord, isString, numberValue, requireRecord, stringValue } from '@/lib/runtimeTypes';
 import { AlertCircle, Save, LogOut } from 'lucide-react';
 import Meters from '@/components/roleplay/Meters';
 import DMPanel from '@/components/roleplay/DMPanel';
@@ -128,12 +129,22 @@ const resetIntelFor=(c,mode='clear')=>{if(!c||!npc)return;let newIntel;if(mode==
       const checkSc=checkResult?.social_changes||{};
       const checkScText=Object.values(checkSc).some(v=>v)?` Social shifts being applied: ${Object.entries(checkSc).filter(([,v])=>v).map(([k,v])=>`${k} ${v>=0?'+':''}${v}`).join(', ')}.`:'';
       const checkCtx=checkResult?`\nPLAYER CHECK — REQUIRED CONTEXT: ${checkResult.skill} check by ${checkResult.character||'a party member'} — total ${checkResult.total}${checkResult.final_dc?` vs DC ${checkResult.final_dc}`:''} → ${checkResult.degree_label}. What the player learned: ${(checkResult.revealed_to_player||checkResult.findings||[]).join('; ')}. ${checkResult.npc_reaction?`The NPC notices: ${checkResult.npc_reaction}`:'The NPC does not notice the attempt.'}${checkScText} The NPC's awareness, actions, emotional tone, and dialogue MUST be consistent with this outcome and the social shifts above. A successful check reveals what the acting character learns — it does NOT force the NPC to reveal secrets or change their mind unless the skill and outcome warrant it.\n`:'';
-      const result=await base44.integrations.Core.InvokeLLM({
+      const rawResult=await base44.integrations.Core.InvokeLLM({
         prompt:`Roleplay as this D&D NPC. Stay in character. Never reveal secrets or conditional information unless trust, motivations, circumstances, and the player's approach justify it. The DM sees thoughts, the player does not.\nNPC: ${JSON.stringify(trimNpcForLLM(npc))}\nScene state: ${JSON.stringify(trimConvoForLLM(convo))}\nConversation:\n${recent}${checkCtx}\nReturn dialogue (the NPC's spoken words), action (physical actions, gestures, or narration of what the NPC does — empty string if none), private internal thoughts, updated social metrics (0-100 except relationship -100 to 100), any newly learned public information, and only secrets actually revealed in the spoken response. When a player check is provided it is required: shape the NPC's awareness and reaction to match the outcome.`,
         response_json_schema:{type:'object',properties:{dialogue:{type:'string'},action:{type:'string'},thoughts:{type:'string'},relationship_score:{type:'number'},trust:{type:'number'},fear:{type:'number'},respect:{type:'number'},hostility:{type:'number'},learned_information:{type:'array',items:{type:'string'}},revealed_secrets:{type:'array',items:{type:'string'}}},required:['dialogue','thoughts']}
       });
-      const dialogue=result.dialogue||result.response||'';
-      const reply=await base44.entities.Message.create({conversation_id:convo.id,role:'npc',content:dialogue,action:result.action||'',thoughts:result.thoughts});
+      const response=requireRecord(rawResult,'Roleplay response');
+      const result={
+        dialogue:stringValue(response.dialogue)||stringValue(response.response),
+        action:stringValue(response.action),thoughts:stringValue(response.thoughts),
+        relationship_score:numberValue(response.relationship_score,convo.relationship_score||0),
+        trust:numberValue(response.trust,convo.trust||20),fear:numberValue(response.fear,convo.fear||0),
+        respect:numberValue(response.respect,convo.respect||10),hostility:numberValue(response.hostility,convo.hostility||0),
+        learned_information:arrayOf(response.learned_information,isString),
+        revealed_secrets:arrayOf(response.revealed_secrets,isString),
+      };
+      const dialogue=result.dialogue;
+      const reply=await base44.entities.Message.create({conversation_id:convo.id,role:'npc',content:dialogue,action:result.action,thoughts:result.thoughts});
       const sc=checkResult?.social_changes||{};
       const clampN=(n,lo=0,hi=100)=>Math.max(lo,Math.min(hi,n));
       const bT=result.trust!=null?result.trust:convo.trust,bF=result.fear!=null?result.fear:convo.fear,bR=result.respect!=null?result.respect:convo.respect,bH=result.hostility!=null?result.hostility:convo.hostility;
@@ -156,7 +167,8 @@ const resetIntelFor=(c,mode='clear')=>{if(!c||!npc)return;let newIntel;if(mode==
     const recent=messages.slice(-8).map(m=>`${m.role}: ${m.content}`).join('\n');
     let narrative=null;
     try{narrative=await generateCheckNarrative({npc,convo,skill:result.skill,total:result.total,dc:result.final_dc,degree:{degree:result.degree,label:result.degree_label},character:result.character,recentContext:recent});}catch{narrative=null;}
-    const nr={...result,id:`${Date.now()}`,exchange_id:latestUserMsg?.id||null,timestamp:new Date().toISOString(),applied:false,findings:narrative?.findings||[],revealed_to_player:narrative?.revealedToPlayer||[],npc_reaction:narrative?.npcReaction||'',social_changes:narrative?.socialChanges||{}};
+    const narrativeData=isRecord(narrative)?narrative:{};
+    const nr={...result,id:`${Date.now()}`,exchange_id:latestUserMsg?.id||null,timestamp:new Date().toISOString(),applied:false,findings:arrayOf(narrativeData.findings,isString),revealed_to_player:arrayOf(narrativeData.revealedToPlayer,isString),npc_reaction:stringValue(narrativeData.npcReaction),social_changes:isRecord(narrativeData.socialChanges)?narrativeData.socialChanges:{}};
     const cr=[...(convo.check_results||[]),nr];
     try{const u=await base44.entities.Conversation.update(convo.id,{check_results:cr});setConvo(u);}catch{}
     setBusy(false);

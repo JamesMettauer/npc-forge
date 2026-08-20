@@ -12,6 +12,7 @@ import { generateFromPrompt, generateGenericSetting, loadCampaigns } from '@/lib
 import { saveDefaultSnapshot } from '@/lib/npcReset';
 import { loadDraft, saveDraft, clearDraft, hasDraftData } from '@/lib/npcDraft';
 import { applyTemplateData } from '@/lib/npcTemplate';
+import { arrayOf, isRecord, isString, stringValue } from '@/lib/runtimeTypes';
 
 export default function CreateNPC(){
   const [params]=useSearchParams();
@@ -63,7 +64,7 @@ export default function CreateNPC(){
   useEffect(()=>{const id=params.get('duplicate');if(id)base44.entities.NPC.get(id).then(x=>{const {id:_,created_date,updated_date,created_by_id,...copy}=x;clearDraft();setNPC({...copy,name:`${x.name} Copy`,archived:false});setChoice(copy.mode)});},[]);
   useEffect(()=>{loadCampaigns().then(setCampaigns);base44.entities.NPCTemplate.list('-created_date').then(setTemplates);},[]);
   const choose=async c=>{if(c==='quick')setChoice(c);else if(c==='auto')setChoice(c);else{clearDraft();setNPC({...initialNPC,mode:c});setChoice(c)}};
-  const generate=async()=>{setBusy(true);try{const campaign=campaignId?await base44.entities.Campaign.get(campaignId):null;const data=await generateFromPrompt(prompt,campaign,{});const{sources,warnings,extracted,generated,...fields}=data;const next={...initialNPC,...fields,mode:'roleplay',original_creation_prompt:prompt,prompt_sources:sources||{},prompt_meta:{warnings:warnings||[],extracted:extracted||[],generated:generated||[]},campaign_id:campaign?.id||''};if(!next.faction)next.faction='Independent';if(!next.campaign)next.campaign=campaign?.name||generateGenericSetting(next);clearDraft();setNPC(next);setChoice('roleplay');}catch{}setBusy(false)};
+  const generate=async()=>{setBusy(true);try{const campaign=campaignId?await base44.entities.Campaign.get(campaignId):null;const data=await generateFromPrompt(prompt,campaign,{});const{sources,warnings,extracted,generated,...fields}=data;const next={...initialNPC,...fields,mode:'roleplay',faction:stringValue(fields.faction),campaign:stringValue(fields.campaign),original_creation_prompt:prompt,prompt_sources:isRecord(sources)?sources:{},prompt_meta:{warnings:arrayOf(warnings,isString),extracted:arrayOf(extracted,isString),generated:arrayOf(generated,isString)},campaign_id:campaign?.id||''};if(!next.faction)next.faction='Independent';if(!next.campaign)next.campaign=campaign?.name||generateGenericSetting(next);clearDraft();setNPC(next);setChoice('roleplay');}catch{}setBusy(false)};
   const useTemplate=(template)=>{const next=applyTemplateData(initialNPC,template?.npc_data);clearDraft();setNPC(next);setChoice(next.mode==='combat'?'combat':'roleplay');};
   const save=async()=>{setBusy(true);try{const s=await base44.entities.NPC.create(npc);const withBaseline=await saveDefaultSnapshot(s);clearDraft();setSaved(withBaseline);}catch{}setBusy(false)};
   const reset=()=>{clearDraft();setSaved(null);setChoice(null);setNPC(initialNPC);setPrompt('');};
