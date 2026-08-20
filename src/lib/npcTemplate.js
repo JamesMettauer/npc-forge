@@ -57,7 +57,6 @@ export const NPC_TEMPLATE_FIELDS = Object.freeze([
   'spells',
   'equipment',
   'damage_defenses',
-  'quantity',
   'morale',
   'tactics',
   'npc_build_type',
@@ -65,7 +64,6 @@ export const NPC_TEMPLATE_FIELDS = Object.freeze([
   'ruleset',
   'voice_profile',
   'primary_traits',
-  'sheet',
 ]);
 
 const cloneValue = (value) => {

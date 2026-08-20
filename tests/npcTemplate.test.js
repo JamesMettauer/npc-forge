@@ -9,6 +9,7 @@ const prohibited = {
   profile_history: [{ id: 'history-1' }], profile_backups: [{ id: 'backup-1' }], default_snapshot: { name: 'Old Name' },
   original_creation_prompt: 'private provenance', prompt_sources: { source: 'private' }, prompt_meta: { generated: ['name'] },
   temporary: true, archived: true, created_by_id: 'user-1', created_date: 'yesterday', updated_date: 'today',
+  quantity: 12, sheet: { notes: 'Instance secret', motivation: 'Instance motivation' },
 };
 
 test('template extraction retains reusable fields and rejects instance fields', () => {
