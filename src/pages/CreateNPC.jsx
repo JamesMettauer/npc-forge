@@ -11,6 +11,7 @@ import { initialNPC } from '@/lib/npcFields';
 import { generateFromPrompt, generateGenericSetting, loadCampaigns } from '@/lib/promptGeneration';
 import { saveDefaultSnapshot } from '@/lib/npcReset';
 import { loadDraft, saveDraft, clearDraft, hasDraftData } from '@/lib/npcDraft';
+import { applyTemplateData } from '@/lib/npcTemplate';
 
 export default function CreateNPC(){
   const [params]=useSearchParams();
@@ -60,9 +61,10 @@ export default function CreateNPC(){
     return()=>window.removeEventListener('beforeunload',flush);
   },[]);
   useEffect(()=>{const id=params.get('duplicate');if(id)base44.entities.NPC.get(id).then(x=>{const {id:_,created_date,updated_date,created_by_id,...copy}=x;clearDraft();setNPC({...copy,name:`${x.name} Copy`,archived:false});setChoice(copy.mode)});},[]);
-  useEffect(()=>{loadCampaigns().then(setCampaigns);},[]);
+  useEffect(()=>{loadCampaigns().then(setCampaigns);base44.entities.NPCTemplate.list('-created_date').then(setTemplates);},[]);
   const choose=async c=>{if(c==='quick')setChoice(c);else if(c==='auto')setChoice(c);else{clearDraft();setNPC({...initialNPC,mode:c});setChoice(c)}};
   const generate=async()=>{setBusy(true);try{const campaign=campaignId?await base44.entities.Campaign.get(campaignId):null;const data=await generateFromPrompt(prompt,campaign,{});const{sources,warnings,extracted,generated,...fields}=data;const next={...initialNPC,...fields,mode:'roleplay',original_creation_prompt:prompt,prompt_sources:sources||{},prompt_meta:{warnings:warnings||[],extracted:extracted||[],generated:generated||[]},campaign_id:campaign?.id||''};if(!next.faction)next.faction='Independent';if(!next.campaign)next.campaign=campaign?.setting||generateGenericSetting(next);clearDraft();setNPC(next);setChoice('roleplay');}catch{}setBusy(false)};
+  const useTemplate=(template)=>{const next=applyTemplateData(initialNPC,template?.npc_data);clearDraft();setNPC(next);setChoice(next.mode==='combat'?'combat':'roleplay');};
   const save=async()=>{setBusy(true);try{const s=await base44.entities.NPC.create(npc);const withBaseline=await saveDefaultSnapshot(s);clearDraft();setSaved(withBaseline);}catch{}setBusy(false)};
   const reset=()=>{clearDraft();setSaved(null);setChoice(null);setNPC(initialNPC);setPrompt('');};
   return (
@@ -80,6 +82,7 @@ export default function CreateNPC(){
                 </header>
               </div>
               {!choice ? <ModeChooser onChoose={choose}/> :
+               choice==='template' ? <div><button onClick={()=>setChoice(null)} className="mb-4 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">← Back to choices</button><TemplatePicker templates={templates} onUseTemplate={useTemplate}/></div> :
                choice==='auto' ? <PromptBox prompt={prompt} setPrompt={setPrompt} generate={generate} busy={busy} campaigns={campaigns} campaignId={campaignId} setCampaignId={setCampaignId}/> :
                choice==='quick' ? <QuickEncounter setNPC={setNPCWithSave} onPromote={()=>{setNPCWithSave(p=>({...p,temporary:false}));setChoice('combat')}} onSave={save} saving={busy} campaigns={campaigns} campaignId={campaignId} setCampaignId={setCampaignId}/> :
                choice==='interview' ? <div><div className="mb-4"><button onClick={()=>setChoice(null)} className="rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">← Back to choices</button></div><InterviewChat/></div> :
