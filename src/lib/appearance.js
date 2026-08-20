@@ -1,4 +1,5 @@
 import { base44 } from '@/api/base44Client';
+import { requireRecord, stringValue } from '@/lib/runtimeTypes';
 
 const clean = (v) => {
   if (v === null || v === undefined) return '';
@@ -196,7 +197,7 @@ ${ctx}
 
 Return JSON with key physical_description (string).`;
   const schema = { type: 'object', properties: { physical_description: { type: 'string' } }, required: ['physical_description'] };
-  return (await llm(prompt, schema)).physical_description;
+  return stringValue(requireRecord(await llm(prompt, schema), 'Physical appearance response').physical_description);
 };
 
 export const generateClothing = async (npc) => {
@@ -219,7 +220,7 @@ ${ctx}
 
 Return JSON with key clothing_equipment (string).`;
   const schema = { type: 'object', properties: { clothing_equipment: { type: 'string' } }, required: ['clothing_equipment'] };
-  return (await llm(prompt, schema)).clothing_equipment;
+  return stringValue(requireRecord(await llm(prompt, schema), 'Clothing response').clothing_equipment);
 };
 
 export const generateDistinguishing = async (npc) => {
@@ -241,7 +242,7 @@ ${ctx}
 
 Return JSON with key distinguishing_features (string).`;
   const schema = { type: 'object', properties: { distinguishing_features: { type: 'string' } }, required: ['distinguishing_features'] };
-  return (await llm(prompt, schema)).distinguishing_features;
+  return stringValue(requireRecord(await llm(prompt, schema), 'Distinguishing features response').distinguishing_features);
 };
 
 export const ART_STYLES = [

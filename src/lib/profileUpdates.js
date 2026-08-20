@@ -1,6 +1,7 @@
 import { base44 } from '@/api/base44Client';
 import { PROFILE_FIELDS, isSensitive } from './profileFields';
 import { PERSONALITY_FIELDS, addEntryToField } from './personality';
+import { requireRecord, recordArray } from './runtimeTypes';
 
 const PLACEHOLDER = /^(unknown|none|not set|n\/a|unspecified|\s*)$/i;
 
@@ -69,7 +70,7 @@ Return JSON { "updates": [ { "field": "<key>", "field_label": "<label>", "curren
       },
     });
   } catch { return null; }
-  return (data && data.updates) || [];
+  return recordArray(requireRecord(data, 'Profile update response').updates);
 };
 
 // Fields that track the live conversation state — always kept current automatically.

@@ -1,4 +1,5 @@
 import { base44 } from '@/api/base44Client';
+import { isRecord, isString, arrayOf, requireRecord } from '@/lib/runtimeTypes';
 
 export const STEP1_FIELDS = ['name','nicknames','pronouns','age','species','homeland','region','culture','occupation','class_name','subclass','level','alignment','faction','campaign'];
 
@@ -144,7 +145,7 @@ export const generateFromPrompt = async (prompt, campaign, existing) => {
     prompt: buildPrompt(prompt, campaign, existing),
     response_json_schema: schema,
   });
-  return data || {};
+  return requireRecord(data, 'NPC generation response');
 };
 
 export const generateMissingDetails = async (npc, campaign) => {
@@ -153,17 +154,18 @@ export const generateMissingDetails = async (npc, campaign) => {
   const data = await generateFromPrompt(npc.original_creation_prompt || '', campaign, existing);
   const out = { ...npc };
   const sources = { ...(npc.prompt_sources || {}) };
+  const generatedSources = isRecord(data.sources) ? data.sources : {};
   for (const f of STEP1_FIELDS) {
     if (!out[f] || !String(out[f]).trim()) {
       if (data[f] != null && String(data[f]).trim() !== '') {
         out[f] = f === 'level' ? Number(data[f]) : data[f];
-        sources[f] = (data.sources && data.sources[f]) || 'generated';
+        sources[f] = generatedSources[f] || 'generated';
       }
     }
   }
   if (!out.faction || !String(out.faction).trim()) { out.faction = 'Independent'; sources.faction = sources.faction || 'generated'; }
   if (!out.campaign || !String(out.campaign).trim()) { out.campaign = campaign?.setting || generateGenericSetting(out); sources.campaign = sources.campaign || 'generated'; }
   out.prompt_sources = sources;
-  out.prompt_meta = { ...(npc.prompt_meta || {}), warnings: data.warnings || [], extracted: data.extracted || [], generated: data.generated || [] };
+  out.prompt_meta = { ...(npc.prompt_meta || {}), warnings: arrayOf(data.warnings, isString), extracted: arrayOf(data.extracted, isString), generated: arrayOf(data.generated, isString) };
   return out;
 };

@@ -1,4 +1,5 @@
 import { base44 } from '@/api/base44Client';
+import { arrayOf, isString, requireRecord, recordArray, stringValue } from '@/lib/runtimeTypes';
 
 export const CATEGORIES = [
   ['personality_traits', 'Personality traits'],
@@ -172,6 +173,11 @@ export const detectConflicts = async (traits) => {
       prompt: `Evaluate these D&D NPC traits for conflicts. Traits: ${JSON.stringify(traits)}. Identify direct contradictions, strong conflicts, duplicates, and minor tensions. Do NOT flag nuanced complexity (e.g. "brave but afraid of enclosed spaces", "honest except when protecting family") as conflicts. Return a conflicts array; each item: {traits:[a,b], severity (Duplicate|Minor Tension|Strong Conflict|Direct Contradiction), reason, suggestion}. Only include real conflicts.`,
       response_json_schema: { type: 'object', properties: { conflicts: { type: 'array', items: { type: 'object', properties: { traits: { type: 'array', items: { type: 'string' } }, severity: { type: 'string' }, reason: { type: 'string' }, suggestion: { type: 'string' } } } } } },
     });
-    return data.conflicts || [];
+    return recordArray(requireRecord(data, 'Trait conflict response').conflicts).map((conflict) => ({
+      traits: arrayOf(conflict.traits, isString),
+      severity: stringValue(conflict.severity),
+      reason: stringValue(conflict.reason),
+      suggestion: stringValue(conflict.suggestion),
+    }));
   } catch { return null; }
 };

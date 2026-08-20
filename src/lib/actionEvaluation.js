@@ -1,4 +1,5 @@
 import { base44 } from '@/api/base44Client';
+import { arrayOf, isRecord, isString, stringValue } from '@/lib/runtimeTypes';
 import { SKILLS, degreeOfOutcome, generateCheckNarrative } from './dice';
 
 const rollD20 = () => 1 + Math.floor(Math.random() * 20);
@@ -94,16 +95,17 @@ export const resolveCheck = async ({ npc, convo, skill, character, modifier, d20
     }
   }
   const degree = effectiveDc != null ? degreeOfOutcome(total, effectiveDc, d20s, null) : { degree: 'narrative', label: 'Narrative' };
-  const narrative = await generateCheckNarrative({
+  const narrativeResult = await generateCheckNarrative({
     npc, convo, skill, total, dc: effectiveDc || 0, degree, character, recentContext,
   });
+  const narrative = isRecord(narrativeResult) ? narrativeResult : {};
   return {
     skill, character: character || '', modifier: modifier || 0,
     d20s: d20s || [], kept: kept ?? total, total,
     advantage: !!advantage, disadvantage: !!disadvantage,
     final_dc: effectiveDc, difficulty, degree: degree.degree, degree_label: degree.label,
-    findings: narrative?.findings || [], revealed_to_player: narrative?.revealedToPlayer || [],
-    npc_reaction: narrative?.npcReaction || '', social_changes: narrative?.socialChanges || {},
+    findings: arrayOf(narrative.findings, isString), revealed_to_player: arrayOf(narrative.revealedToPlayer, isString),
+    npc_reaction: stringValue(narrative.npcReaction), social_changes: isRecord(narrative.socialChanges) ? narrative.socialChanges : {},
     opposed_result: opposedResult, hide_dc: !!hideDc, visibility: 'DM Only', timestamp: new Date().toISOString(),
   };
 };

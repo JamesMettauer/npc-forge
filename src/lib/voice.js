@@ -1,4 +1,5 @@
 import { base44 } from '@/api/base44Client';
+import { requireRecord, stringValue } from '@/lib/runtimeTypes';
 
 export const VOICE_FIELDS = [
   { key: 'speaking_style', label: 'Speaking style', desc: 'Overall manner of speech.' },
@@ -65,8 +66,8 @@ export const generateVoiceField = async (npc, fieldKey) => {
   const prompt = `Generate the "${f.label}" for a fantasy tabletop RPG NPC. ${f.desc} Make it specific to this NPC's homeland, region, culture, role, personality, and campaign setting. Keep it concise (one short paragraph or a few phrases). Write in third person.${emptyInstruction}\n\n${guardrails}\n\nNPC profile:\n${buildProfile(npc) || 'A generic fantasy NPC'}\n\nReturn JSON with key "${fieldKey}" (string; may be empty if this is a boundary field with no supporting evidence).`;
   const schema = { type: 'object', properties: { [fieldKey]: { type: 'string' } }, required: [fieldKey] };
   try {
-    const data = await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema });
-    return data?.[fieldKey] || null;
+    const data = requireRecord(await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema }), 'Voice field response');
+    return stringValue(data[fieldKey]) || null;
   } catch { return null; }
 };
 
@@ -95,7 +96,8 @@ Return JSON with keys: speaking_style, vocabulary, accent, expressions, avoided_
     required: VOICE_PROFILE_FIELDS,
   };
   try {
-    return await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema });
+    const data = requireRecord(await base44.integrations.Core.InvokeLLM({ prompt, response_json_schema: schema }), 'Voice profile response');
+    return Object.fromEntries(VOICE_PROFILE_FIELDS.map((key) => [key, stringValue(data[key])]));
   } catch { return null; }
 };
 

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Zap, Loader2, UserPlus, ArrowRightCircle, Save, RotateCcw, Swords } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { requireRecord, stringValue } from '@/lib/runtimeTypes';
 import QuantityStepper from '@/components/npc/QuantityStepper';
 import EncounterMoreOptions from '@/components/npc/EncounterMoreOptions';
 
@@ -93,7 +94,7 @@ Generate a JSON object with these fields:
 
 Scale stats to the Encounter Role. If a campaign context is provided, favor established factions, equipment, names, and terminology.`;
 
-      const data = await base44.integrations.Core.InvokeLLM({
+      const data = requireRecord(await base44.integrations.Core.InvokeLLM({
         prompt,
         response_json_schema: {
           type: 'object',
@@ -119,12 +120,12 @@ Scale stats to the Encounter Role. If a campaign context is provided, favor esta
           },
           required: ['name', 'armor_class', 'hit_points'],
         },
-      });
+      }), 'Quick encounter response');
 
       const encounter = {
         ...data,
-        species: options.species || data.species,
-        faction: options.faction || data.faction || '',
+        species: options.species || stringValue(data.species),
+        faction: options.faction || stringValue(data.faction),
         mode: 'combat',
         ally_status: DISPOSITION_MAP[disposition] || 'unknown',
         power_level: role,
@@ -146,14 +147,15 @@ Scale stats to the Encounter Role. If a campaign context is provided, favor esta
     if (!result || nameBusy) return;
     setNameBusy(true);
     try {
-      const data = await base44.integrations.Core.InvokeLLM({
+      const data = requireRecord(await base44.integrations.Core.InvokeLLM({
         prompt: `Generate a unique fantasy name for this D&D NPC: ${result.name} (${result.species}). Return just the name, nothing else.`,
         response_json_schema: { type: 'object', properties: { name: { type: 'string' } }, required: ['name'] },
-      });
-      if (data?.name) {
-        const updated = { ...result, name: data.name };
+      }), 'Encounter name response');
+      const generatedName = stringValue(data.name);
+      if (generatedName) {
+        const updated = { ...result, name: generatedName };
         setResult(updated);
-        setNPC(p => ({ ...p, name: data.name }));
+        setNPC(p => ({ ...p, name: generatedName }));
       }
     } catch {}
     setNameBusy(false);
