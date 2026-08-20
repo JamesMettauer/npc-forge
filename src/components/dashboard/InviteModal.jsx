@@ -15,7 +15,7 @@ export default function InviteModal({ open, onClose, campaigns }) {
     if (!email.trim()) return;
     setBusy(true); setErr('');
     try {
-      await base44.users.inviteUser(email.trim(), role);
+      await base44.auth.inviteUser(email.trim(), role);
       setDone(true);
     } catch (e) { setErr('Could not send invitation. The email may already be invited.'); }
     setBusy(false);

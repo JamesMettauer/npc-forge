@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Sparkles, RefreshCw, Pencil, Lock, Unlock, Check, X, Wand2, Volume2, Square, AlertCircle, Plus, ChevronDown, ChevronUp } from 'lucide-react';
-import { generateVoiceField, generateCompleteVoiceProfile, speak, getVoices, voiceAvailable, TEST_SAMPLES, generateStudioSpeech } from '@/lib/voice';
+import { generateVoiceField, generateCompleteVoiceProfile, speak, getVoices, voiceAvailable, TEST_SAMPLES } from '@/lib/voice';
 
 const has = (v) => !!(v && String(v).trim());
 
@@ -33,10 +33,9 @@ export default function VoiceStep({ npc, setNPC }){
   const [pitch, setPitch] = useState(1);
   const [emotion, setEmotion] = useState('neutral');
   const [speaking, setSpeaking] = useState(false);
+  const speechController = useRef(null);
   const [voices, setVoices] = useState([]);
   const [voiceName, setVoiceName] = useState('');
-  const [studioUrl, setStudioUrl] = useState('');
-  const [studioBusy, setStudioBusy] = useState(false);
   const [expanded, setExpanded] = useState({});
   const [showAudio, setShowAudio] = useState(false);
 
@@ -76,25 +75,12 @@ export default function VoiceStep({ npc, setNPC }){
     if (!line) return;
     if (!voiceAvailable()) { setMsg('Voice preview is not available in this browser. You can still complete the NPC.'); setTimeout(() => setMsg(''), 3000); return; }
     setSpeaking(true);
-    const ctrl = speak(line, { rate, pitch, voice: voiceName });
+    const ctrl = speak(line, { rate, pitch, voice: voiceName, onEnd: () => { speechController.current = null; setSpeaking(false); } });
     if (!ctrl) { setSpeaking(false); return; }
-    const stop = () => { ctrl.stop(); setSpeaking(false); };
-    window.speechSynthesis.onend = () => setSpeaking(false);
-    setSpeaking({ stop });
+    speechController.current = ctrl;
   };
 
-  const stopVoice = () => { if (typeof speaking === 'object' && speaking?.stop) speaking.stop(); else if (voiceAvailable()) window.speechSynthesis.cancel(); setSpeaking(false); };
-
-  const studioPreview = async (text) => {
-    const line = (text || testLine || TEST_SAMPLES[emotion] || '').trim();
-    if (!line || studioBusy) return;
-    setStudioBusy(true); setStudioUrl(''); setMsg('Generating studio voice…');
-    try {
-      const url = await generateStudioSpeech(line, 'storm');
-      if (url) { setStudioUrl(url); setMsg('Studio voice ready.'); } else setMsg('Could not generate studio voice.');
-    } catch { setMsg('Could not generate studio voice.'); }
-    setStudioBusy(false); setTimeout(() => setMsg(''), 3000);
-  };
+  const stopVoice = () => { speechController.current?.stop(); speechController.current = null; setSpeaking(false); };
 
   const inputCls = 'mt-1 w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-brand/50';
 
@@ -180,7 +166,7 @@ export default function VoiceStep({ npc, setNPC }){
         </button>
         {showAudio && (
           <div className="mt-2 rounded-xl border border-border p-3">
-            <p className="text-xs text-muted-foreground">Preview the NPC's voice using your browser's speech synthesis or studio generation. This is optional — the communication profile above works for text dialogue without it.</p>
+            <p className="text-xs text-muted-foreground">Preview the NPC's voice using your browser's speech synthesis. This is optional — the communication profile above works for text dialogue without it.</p>
             <textarea rows={2} value={testLine} onChange={(e) => setTestLine(e.target.value)} placeholder={TEST_SAMPLES[emotion]} className={inputCls}/>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <label className="flex items-center gap-1">Emotion
@@ -206,10 +192,8 @@ export default function VoiceStep({ npc, setNPC }){
               {!speaking ? <button onClick={() => testVoice()} className="flex items-center gap-1.5 rounded-lg bg-brand px-3 py-1.5 text-xs font-semibold text-brand-foreground"><Volume2 size={12}/>Test Voice</button>
                 : <button onClick={stopVoice} className="flex items-center gap-1.5 rounded-lg border border-destructive px-3 py-1.5 text-xs text-destructive"><Square size={12}/>Stop</button>}
               <button onClick={() => testVoice(TEST_SAMPLES[emotion])} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-foreground"><Volume2 size={12}/>Preview {emotion}</button>
-              <button onClick={() => studioPreview()} disabled={studioBusy} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-foreground disabled:opacity-40"><Sparkles size={12}/>{studioBusy ? 'Generating…' : 'Studio Preview'}</button>
               <button onClick={() => { set('voice_profile', { ...(npc.voice_profile || {}), test_line: testLine || TEST_SAMPLES[emotion], rate, pitch, emotion }); setMsg('Voice settings saved.'); setTimeout(() => setMsg(''), 2000); }} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-foreground"><Check size={12}/>Approve Voice</button>
             </div>
-            {studioUrl && !studioBusy && <audio key={studioUrl} controls src={studioUrl} className="mt-2 w-full" />}
             {!voiceAvailable() && <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground"><AlertCircle size={12}/>Voice preview unavailable in this browser. Character creation can still continue.</p>}
           </div>
         )}

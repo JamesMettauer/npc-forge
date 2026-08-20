@@ -119,6 +119,7 @@ export const speak = (text, opts = {}) => {
     const match = voices.find((v) => v.name === opts.voice);
     if (match) u.voice = match;
   }
+  if (typeof opts.onEnd === 'function') u.onend = opts.onEnd;
   synth.speak(u);
   return { stop: () => synth.cancel() };
 };
@@ -130,15 +131,6 @@ export const getVoices = () => {
 
 export const voiceAvailable = () => typeof window !== 'undefined' && !!window.speechSynthesis;
 
-// High-quality studio TTS via the GenerateSpeech integration — far more natural
-// than browser speechSynthesis. Returns a playable MP3 URL.
-export const generateStudioSpeech = async (text, voice, languageCode) => {
-  try {
-    const res = await base44.integrations.Core.GenerateSpeech({
-      text: String(text).slice(0, 5000),
-      voice,
-      language_code: languageCode,
-    });
-    return res?.url || null;
-  } catch { return null; }
-};
+// The installed Base44 SDK has no speech-generation integration. Keep the
+// capability truthful and let the UI fall back to browser speech synthesis.
+export const generateStudioSpeech = async () => null;

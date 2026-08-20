@@ -26,7 +26,7 @@ export default function PortraitStudio({ npc, setNPC }){
   const addCandidate = async () => {
     setBusy(true); setError('');
     try {
-      const { url } = await base44.integrations.Core.GenerateImage({ prompt: buildPrompt(), existing_image_urls: approved ? [approved] : undefined });
+      const { url } = await base44.integrations.Core.GenerateImage({ prompt: buildPrompt() });
       const c = { id: newId(), url, created_date: new Date().toISOString(), approved: false };
       setNPC((p) => ({ ...p, portrait_candidates: [...(p.portrait_candidates || []), c], portrait_url: url }));
     } catch { setError('Portrait generation failed. Please try again.'); }
@@ -37,7 +37,7 @@ export default function PortraitStudio({ npc, setNPC }){
     if (!current) return addCandidate();
     setBusy(true); setError('');
     try {
-      const { url } = await base44.integrations.Core.GenerateImage({ prompt: buildPrompt(), existing_image_urls: approved ? [approved] : undefined });
+      const { url } = await base44.integrations.Core.GenerateImage({ prompt: buildPrompt() });
       setNPC((p) => ({
         ...p,
         portrait_candidates: (p.portrait_candidates || []).map((c) => (c.url === current ? { ...c, url } : c)),
@@ -53,7 +53,6 @@ export default function PortraitStudio({ npc, setNPC }){
     try {
       const { url } = await base44.integrations.Core.GenerateImage({
         prompt: `${buildPrompt()} — a new variant of this same character. Preserve face, species, anatomy, apparent age, hair, build, core clothing, and art style. Vary expression, pose, gesture, lighting, scene, weather, or temporary details.`,
-        existing_image_urls: [approved],
       });
       const v = { id: newId(), url, created_date: new Date().toISOString(), approved: false };
       setNPC((p) => ({ ...p, portrait_variants: [...(p.portrait_variants || []), v], portrait_url: url }));
@@ -66,10 +65,8 @@ export default function PortraitStudio({ npc, setNPC }){
     if (!instruction) return;
     setBusy(true); setError('');
     try {
-      const target = current || approved;
       const { url } = await base44.integrations.Core.GenerateImage({
         prompt: `${buildPrompt()}. Apply this edit: ${instruction}. Preserve face, species, anatomy, apparent age, hair, build, core clothing, and art style.`,
-        existing_image_urls: [target],
       });
       const v = { id: newId(), url, created_date: new Date().toISOString(), approved: false };
       setNPC((p) => ({ ...p, portrait_variants: [...(p.portrait_variants || []), v], portrait_url: url }));
