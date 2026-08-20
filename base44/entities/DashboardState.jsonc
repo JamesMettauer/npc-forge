@@ -1,0 +1,62 @@
+{
+  "name": "DashboardState",
+  "type": "object",
+  "properties": {
+    "theme_id": {
+      "type": "string",
+      "default": "guildmaster"
+    },
+    "mobile_view": {
+      "type": "string",
+      "enum": [
+        "scene",
+        "compact"
+      ],
+      "default": "scene"
+    },
+    "reduce_motion": {
+      "type": "boolean",
+      "default": false
+    },
+    "ambience_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "volume": {
+      "type": "number",
+      "default": 0.3
+    },
+    "layouts": {
+      "type": "object"
+    },
+    "news_hidden": {
+      "type": "boolean",
+      "default": false
+    },
+    "read_news": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tutorial_dismissed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

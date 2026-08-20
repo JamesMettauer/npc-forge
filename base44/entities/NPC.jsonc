@@ -1,0 +1,605 @@
+{
+  "name": "NPC",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "nicknames": {
+      "type": "string"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "combat",
+        "roleplay"
+      ]
+    },
+    "archived": {
+      "type": "boolean",
+      "default": false
+    },
+    "pronouns": {
+      "type": "string"
+    },
+    "sex_gender": {
+      "type": "string"
+    },
+    "custom_species_data": {
+      "type": "object"
+    },
+    "age": {
+      "type": "string"
+    },
+    "species": {
+      "type": "string"
+    },
+    "homeland": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "culture": {
+      "type": "string"
+    },
+    "class_name": {
+      "type": "string"
+    },
+    "subclass": {
+      "type": "string"
+    },
+    "level": {
+      "type": "number"
+    },
+    "alignment": {
+      "type": "string"
+    },
+    "occupation": {
+      "type": "string"
+    },
+    "faction": {
+      "type": "string"
+    },
+    "campaign": {
+      "type": "string"
+    },
+    "campaign_id": {
+      "type": "string"
+    },
+    "original_creation_prompt": {
+      "type": "string"
+    },
+    "prompt_sources": {
+      "type": "object"
+    },
+    "prompt_meta": {
+      "type": "object"
+    },
+    "trait_meta": {
+      "type": "object"
+    },
+    "physical_description": {
+      "type": "string"
+    },
+    "clothing_equipment": {
+      "type": "string"
+    },
+    "distinguishing_features": {
+      "type": "string"
+    },
+    "portrait_url": {
+      "type": "string"
+    },
+    "image_prompt": {
+      "type": "string"
+    },
+    "art_style": {
+      "type": "string"
+    },
+    "lock_identity": {
+      "type": "boolean",
+      "default": false
+    },
+    "current_expression": {
+      "type": "string"
+    },
+    "current_pose": {
+      "type": "string"
+    },
+    "current_visible_equipment": {
+      "type": "string"
+    },
+    "current_background": {
+      "type": "string"
+    },
+    "current_lighting": {
+      "type": "string"
+    },
+    "current_injury": {
+      "type": "string"
+    },
+    "observable_symptoms": {
+      "type": "string"
+    },
+    "hidden_condition": {
+      "type": "string"
+    },
+    "information_tiers": {
+      "type": "string"
+    },
+    "personality_traits": {
+      "type": "string"
+    },
+    "ideals": {
+      "type": "string"
+    },
+    "bonds": {
+      "type": "string"
+    },
+    "flaws": {
+      "type": "string"
+    },
+    "likes_dislikes": {
+      "type": "string"
+    },
+    "fears": {
+      "type": "string"
+    },
+    "mannerisms": {
+      "type": "string"
+    },
+    "humor": {
+      "type": "string"
+    },
+    "temperament": {
+      "type": "string"
+    },
+    "social_behavior": {
+      "type": "string"
+    },
+    "speaking_style": {
+      "type": "string"
+    },
+    "vocabulary": {
+      "type": "string"
+    },
+    "accent": {
+      "type": "string"
+    },
+    "expressions": {
+      "type": "string"
+    },
+    "avoided_topics": {
+      "type": "string"
+    },
+    "conditional_information": {
+      "type": "string"
+    },
+    "backstory": {
+      "type": "string"
+    },
+    "relationships": {
+      "type": "string"
+    },
+    "goals": {
+      "type": "string"
+    },
+    "objectives": {
+      "type": "string"
+    },
+    "secrets": {
+      "type": "string"
+    },
+    "internal_conflicts": {
+      "type": "string"
+    },
+    "current_problems": {
+      "type": "string"
+    },
+    "party_stance_reasons": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "services": {
+      "type": "string"
+    },
+    "quests_rumors": {
+      "type": "string"
+    },
+    "world_knowledge": {
+      "type": "string"
+    },
+    "party_relationship": {
+      "type": "string"
+    },
+    "initial_attitude": {
+      "type": "string"
+    },
+    "ally_status": {
+      "type": "string",
+      "enum": [
+        "ally",
+        "enemy",
+        "neutral",
+        "unknown"
+      ]
+    },
+    "armor_class": {
+      "type": "number"
+    },
+    "hit_points": {
+      "type": "number"
+    },
+    "speed": {
+      "type": "string"
+    },
+    "ability_scores": {
+      "type": "string"
+    },
+    "saving_throws": {
+      "type": "string"
+    },
+    "skills": {
+      "type": "string"
+    },
+    "senses": {
+      "type": "string"
+    },
+    "languages": {
+      "type": "string"
+    },
+    "proficiency_bonus": {
+      "type": "number"
+    },
+    "challenge_rating": {
+      "type": "string"
+    },
+    "actions": {
+      "type": "string"
+    },
+    "bonus_actions": {
+      "type": "string"
+    },
+    "reactions": {
+      "type": "string"
+    },
+    "traits": {
+      "type": "string"
+    },
+    "spells": {
+      "type": "string"
+    },
+    "equipment": {
+      "type": "string"
+    },
+    "damage_defenses": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "temporary": {
+      "type": "boolean",
+      "default": false
+    },
+    "morale": {
+      "type": "string"
+    },
+    "tactics": {
+      "type": "string"
+    },
+    "npc_build_type": {
+      "type": "string",
+      "enum": [
+        "NPC Role",
+        "Adventuring Class",
+        "Hybrid NPC",
+        "Custom NPC"
+      ]
+    },
+    "power_level": {
+      "type": "string",
+      "enum": [
+        "Commoner",
+        "Trained",
+        "Veteran",
+        "Elite",
+        "Boss",
+        "Custom",
+        "Minion",
+        "Standard",
+        "Leader"
+      ]
+    },
+    "ruleset": {
+      "type": "string"
+    },
+    "portrait_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "created_date": {
+            "type": "string"
+          },
+          "approved": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "approved_portrait_url": {
+      "type": "string"
+    },
+    "portrait_variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "created_date": {
+            "type": "string"
+          },
+          "approved": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "voice_profile": {
+      "type": "object"
+    },
+    "primary_traits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "major_life_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "existing_trait": {
+            "type": "string"
+          },
+          "proposed_trait": {
+            "type": "string"
+          },
+          "life_event": {
+            "type": "string"
+          },
+          "campaign_event": {
+            "type": "string"
+          },
+          "change_type": {
+            "type": "string"
+          },
+          "approved": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "profile_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "field_label": {
+            "type": "string"
+          },
+          "previous_value": {
+            "type": "string"
+          },
+          "new_value": {
+            "type": "string"
+          },
+          "update_type": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "approved_by": {
+            "type": "string"
+          },
+          "temporary": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "default_snapshot": {
+      "type": "object"
+    },
+    "profile_backups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "by": {
+            "type": "string"
+          },
+          "snapshot": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "sheet": {
+      "type": "object",
+      "properties": {
+        "size_type": {
+          "type": "string"
+        },
+        "background_role": {
+          "type": "string"
+        },
+        "disposition": {
+          "type": "string"
+        },
+        "hp_current": {
+          "type": "number"
+        },
+        "initiative": {
+          "type": "number"
+        },
+        "passive_perception": {
+          "type": "number"
+        },
+        "str_score": {
+          "type": "number"
+        },
+        "dex_score": {
+          "type": "number"
+        },
+        "con_score": {
+          "type": "number"
+        },
+        "int_score": {
+          "type": "number"
+        },
+        "wis_score": {
+          "type": "number"
+        },
+        "cha_score": {
+          "type": "number"
+        },
+        "str_save_prof": {
+          "type": "boolean"
+        },
+        "dex_save_prof": {
+          "type": "boolean"
+        },
+        "con_save_prof": {
+          "type": "boolean"
+        },
+        "int_save_prof": {
+          "type": "boolean"
+        },
+        "wis_save_prof": {
+          "type": "boolean"
+        },
+        "cha_save_prof": {
+          "type": "boolean"
+        },
+        "skill_proficiencies": {
+          "type": "string"
+        },
+        "languages_senses": {
+          "type": "string"
+        },
+        "resistances_immunities": {
+          "type": "string"
+        },
+        "personality": {
+          "type": "string"
+        },
+        "motivation": {
+          "type": "string"
+        },
+        "appearance": {
+          "type": "string"
+        },
+        "attack_1_name": {
+          "type": "string"
+        },
+        "attack_1_bonus": {
+          "type": "string"
+        },
+        "attack_1_damage": {
+          "type": "string"
+        },
+        "attack_1_notes": {
+          "type": "string"
+        },
+        "attack_2_name": {
+          "type": "string"
+        },
+        "attack_2_bonus": {
+          "type": "string"
+        },
+        "attack_2_damage": {
+          "type": "string"
+        },
+        "attack_2_notes": {
+          "type": "string"
+        },
+        "attack_3_name": {
+          "type": "string"
+        },
+        "attack_3_bonus": {
+          "type": "string"
+        },
+        "attack_3_damage": {
+          "type": "string"
+        },
+        "attack_3_notes": {
+          "type": "string"
+        },
+        "actions_reactions": {
+          "type": "string"
+        },
+        "features_traits": {
+          "type": "string"
+        },
+        "spellcasting": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "name",
+    "mode"
+  ]
+}

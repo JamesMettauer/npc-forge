@@ -1,0 +1,84 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "conversation_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "user",
+        "npc"
+      ]
+    },
+    "content": {
+      "type": "string"
+    },
+    "thoughts": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "dialogue",
+        "action"
+      ],
+      "default": "dialogue"
+    },
+    "action": {
+      "type": "string"
+    },
+    "speaker_name": {
+      "type": "string"
+    },
+    "player_character_id": {
+      "type": "string"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "public",
+        "dm_only",
+        "player_only"
+      ],
+      "default": "public"
+    },
+    "player_roll": {
+      "type": "object",
+      "properties": {
+        "skill": {
+          "type": "string"
+        },
+        "total": {
+          "type": "number"
+        },
+        "dc": {
+          "type": "number"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "character": {
+          "type": "string"
+        },
+        "opposed": {
+          "type": "object",
+          "properties": {
+            "skill": {
+              "type": "string"
+            },
+            "total": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "conversation_id",
+    "role",
+    "content"
+  ]
+}

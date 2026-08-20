@@ -1,0 +1,192 @@
+{
+  "name": "PlayerCharacter",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "player_name": {
+      "type": "string"
+    },
+    "character_class": {
+      "type": "string"
+    },
+    "level": {
+      "type": "number"
+    },
+    "race": {
+      "type": "string"
+    },
+    "campaign_id": {
+      "type": "string"
+    },
+    "campaign": {
+      "type": "string"
+    },
+    "str_score": {
+      "type": "number"
+    },
+    "dex_score": {
+      "type": "number"
+    },
+    "con_score": {
+      "type": "number"
+    },
+    "int_score": {
+      "type": "number"
+    },
+    "wis_score": {
+      "type": "number"
+    },
+    "cha_score": {
+      "type": "number"
+    },
+    "proficiency_bonus": {
+      "type": "number"
+    },
+    "skill_proficiencies": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "pronouns": {
+      "type": "string"
+    },
+    "background": {
+      "type": "string"
+    },
+    "alignment": {
+      "type": "string"
+    },
+    "experience": {
+      "type": "number"
+    },
+    "subclass": {
+      "type": "string"
+    },
+    "multiclass": {
+      "type": "string"
+    },
+    "armor_class": {
+      "type": "number"
+    },
+    "initiative": {
+      "type": "number"
+    },
+    "speed": {
+      "type": "number"
+    },
+    "max_hp": {
+      "type": "number"
+    },
+    "current_hp": {
+      "type": "number"
+    },
+    "temp_hp": {
+      "type": "number"
+    },
+    "hit_dice": {
+      "type": "string"
+    },
+    "saving_throw_proficiencies": {
+      "type": "string"
+    },
+    "skill_details": {
+      "type": "object"
+    },
+    "passive_perception": {
+      "type": "number"
+    },
+    "passive_insight": {
+      "type": "number"
+    },
+    "passive_investigation": {
+      "type": "number"
+    },
+    "languages": {
+      "type": "string"
+    },
+    "tool_proficiencies": {
+      "type": "string"
+    },
+    "weapon_proficiencies": {
+      "type": "string"
+    },
+    "armor_proficiencies": {
+      "type": "string"
+    },
+    "equipment": {
+      "type": "string"
+    },
+    "weapons": {
+      "type": "string"
+    },
+    "armor": {
+      "type": "string"
+    },
+    "spells": {
+      "type": "string"
+    },
+    "feats": {
+      "type": "string"
+    },
+    "personality_traits": {
+      "type": "string"
+    },
+    "ideals": {
+      "type": "string"
+    },
+    "bonds": {
+      "type": "string"
+    },
+    "flaws": {
+      "type": "string"
+    },
+    "appearance": {
+      "type": "string"
+    },
+    "backstory": {
+      "type": "string"
+    },
+    "allies_organizations": {
+      "type": "string"
+    },
+    "source_file_url": {
+      "type": "string"
+    },
+    "source_file_name": {
+      "type": "string"
+    },
+    "source_file_pages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sheet_version": {
+      "type": "number"
+    },
+    "imported_by": {
+      "type": "string"
+    },
+    "upload_date": {
+      "type": "string"
+    },
+    "import_confidence": {
+      "type": "object"
+    },
+    "import_method": {
+      "type": "string"
+    },
+    "page_quality": {
+      "type": "string"
+    },
+    "roleplay_summary": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

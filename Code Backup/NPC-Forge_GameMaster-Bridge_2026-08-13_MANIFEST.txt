@@ -1,0 +1,25 @@
+NPC FORGE LOCAL BACKUP MANIFEST
+
+Status: PASS
+Created: 2026-08-13 (America/Chicago)
+Source: C:\Users\james\OneDrive\Desktop\NPC Forge
+Archive: NPC-Forge_GameMaster-Bridge_2026-08-13.zip
+Archive size: 420046 bytes
+Archived files: 224
+SHA-256: C45E95A9ED9FE761D73B4F4C6858865E14A462DA5DF1DD4B16E2EAAFCF246875
+
+Purpose:
+Create a recoverable local NPC Forge baseline containing the Game Master bridge for Codex.
+
+Bridge files:
+- GameMaster.md
+- AGENTS.md
+
+Excluded:
+- Code Backup (prevents recursive archives)
+- Shared session loop.png
+- Shared session loop v1.1.png
+- The NPC Forge.url
+- The NPC Forge Archive.url
+
+Existing backups and unrelated destination content were preserved.

@@ -1,0 +1,340 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "npc_id": {
+      "type": "string"
+    },
+    "npc_name": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "scene": {
+      "type": "string"
+    },
+    "mood": {
+      "type": "string"
+    },
+    "attitude": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "relationship_score": {
+      "type": "number",
+      "default": 0
+    },
+    "trust": {
+      "type": "number",
+      "default": 20
+    },
+    "fear": {
+      "type": "number",
+      "default": 0
+    },
+    "respect": {
+      "type": "number",
+      "default": 10
+    },
+    "hostility": {
+      "type": "number",
+      "default": 0
+    },
+    "learned_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "revealed_secrets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "profile_update_mode": {
+      "type": "string",
+      "default": "auto_fill"
+    },
+    "pending_updates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "field_label": {
+            "type": "string"
+          },
+          "current_value": {
+            "type": "string"
+          },
+          "proposed_value": {
+            "type": "string"
+          },
+          "update_type": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "classification": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "temporary": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_date": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rejected_updates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "proposed_value": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "check_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "exchange_id": {
+            "type": "string"
+          },
+          "skill": {
+            "type": "string"
+          },
+          "ability": {
+            "type": "string"
+          },
+          "character": {
+            "type": "string"
+          },
+          "modifier": {
+            "type": "number"
+          },
+          "proficiency": {
+            "type": "boolean"
+          },
+          "expertise": {
+            "type": "boolean"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "d20s": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "kept": {
+            "type": "number"
+          },
+          "bonus_die": {
+            "type": "object"
+          },
+          "temp_mod": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "visibility": {
+            "type": "string"
+          },
+          "dc_mode": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "string"
+          },
+          "base_dc": {
+            "type": "number"
+          },
+          "situational_modifiers": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "final_dc": {
+            "type": "number"
+          },
+          "hide_dc": {
+            "type": "boolean"
+          },
+          "crit_setting": {
+            "type": "string"
+          },
+          "degree": {
+            "type": "string"
+          },
+          "degree_label": {
+            "type": "string"
+          },
+          "observed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "npc_reaction": {
+            "type": "string"
+          },
+          "revealed_to_player": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "social_changes": {
+            "type": "object"
+          },
+          "applied": {
+            "type": "boolean"
+          },
+          "reaction_message_id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "intelligence": {
+      "type": "object",
+      "properties": {
+        "observableSymptoms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "temporary": {
+                "type": "boolean"
+              },
+              "locked": {
+                "type": "boolean"
+              },
+              "source": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "hiddenConditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "linkedSymptoms": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "locked": {
+                "type": "boolean"
+              },
+              "source": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "suggestedChecks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "skill": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "dcBreakdowns": {
+          "type": "object"
+        },
+        "lockedDCs": {
+          "type": "object"
+        },
+        "informationTiers": {
+          "type": "object"
+        },
+        "lockedTiers": {
+          "type": "object"
+        },
+        "lastUpdated": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "npc_id",
+    "npc_name"
+  ]
+}
